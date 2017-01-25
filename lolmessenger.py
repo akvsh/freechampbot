@@ -10,7 +10,7 @@ app = Flask(__name__)
 #NA only 
 riotapi.set_region("NA")
 riotapi.set_api_key("YOUR-API-KEY-HERE")
-page_auth_token = ''
+page_auth_token = 'EAAaF14INvz4BADRdJNuZBQD7zIGcfO6ZBRDUTBZBMUx23z1tV1PiL6AZATcCYsE3k2JIRdM4sxTYxgcJliCXovIrdOXw0OrCI8lT5JNlAcocjSjDqAqmAIRon7kPWZCJ9YXARRHVzpfCcrv3hFZB9lyRVu0C1zOV3bkI1gkNwKywZDZD'
 verify_token = 'my_voice_is_my_password_verify_me'
 
 
