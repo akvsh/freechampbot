@@ -8,6 +8,7 @@ import sys
 
 #setup + auth tokens
 app = Flask(__name__)
+#app.config.from_pyfile('config.py')
 #NA only 
 riotapi.set_region("NA")
 riotapi.set_api_key("YOUR-API-KEY-HERE")
@@ -31,10 +32,11 @@ def auth():
 #Messages and how to respond to them
 # 'help' will show certain structured messages
 def send_reply():
-	reply = "Hello World"
-	req = request.json
+	#reply = "Hello World"
+	req = request.json["entry"][0]['messaging'][0]
 	print req
-	sender_id = req["sender"]["id"]
+	sender_id = req['sender']['id']
+	reply = req['message']['text']
 	print sender_id
 	headers = {
 		'Content-Type': 'application/json'
