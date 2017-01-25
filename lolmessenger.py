@@ -10,7 +10,7 @@ app = Flask(__name__)
 #NA only 
 riotapi.set_region("NA")
 riotapi.set_api_key("YOUR-API-KEY-HERE")
-page_auth_token = 'EAAaF14INvz4BAPL7hnDHYUuNmeWxV0bOkctriE0NdX9juQZAIixrVpfIzYy2gqZCE6fUS3UFUwDarGFD1J5HyrVOgI6OkIGSTOotMlSdMEZARZCZBkuxofbC3Jm2mIi0qAS74gqQNaOZCfVsqYeewVeI2bQSNaOq2RjArZAgdfAYgZDZD'
+page_auth_token = 'EAAaF14INvz4BAPBZAbCZAUOpkDBlHmFxFkYaJPJ83bYeZCwH0kJbe7Ru38IkAJO7P4dFDDKqF4ZBLXb8NV4C1tU461MhSBKoJIdub3Nolrxz11DGuWkpdyGdjlOEBDLIbqqZBeNsvcstCWqtQATSsLyNtKYP8F7e385saBJDulAZDZD'
 verify_token = 'my_voice_is_my_password_verify_me'
 
 
@@ -35,6 +35,9 @@ def send_reply():
 	headers = {
 		'Content-Type': 'application/json'
 	}
+	params = {
+		'access_token': page_auth_token
+	}
 	resp = {
 		'recipient': {
 			'id': sender_id
@@ -43,7 +46,7 @@ def send_reply():
 			'text': reply
 		}
 	}
-	r = requests.post('https://graph.facebook.com/v2.6/me/messages?access_token='+page_auth_token, json=resp, headers=headers)
+	r = requests.post('https://graph.facebook.com/v2.6/me/messages', params=params, json=resp, headers=headers)
 	return "Reply Sent"
 
 '''
