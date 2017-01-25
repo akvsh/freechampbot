@@ -3,6 +3,7 @@ from flask import Flask, request
 import requests
 import json
 from cassiopeia import riotapi
+import sys
 
 
 #setup + auth tokens
@@ -28,10 +29,13 @@ def auth():
 
 @app.route('/webhook', methods=['POST'])
 #Messages and how to respond to them
+# 'help' will show certain structured messages
 def send_reply():
 	reply = "Hello World"
 	req = request.json
+	print req
 	sender_id = req["sender"]["id"]
+	print sender_id
 	headers = {
 		'Content-Type': 'application/json'
 	}
@@ -47,6 +51,7 @@ def send_reply():
 		}
 	}
 	r = requests.post('https://graph.facebook.com/v2.6/me/messages', params=params, json=resp, headers=headers)
+	sys.stdout.flush()
 	return "Reply Sent"
 
 '''
