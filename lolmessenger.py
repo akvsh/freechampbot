@@ -30,7 +30,7 @@ def auth():
 #Messages and how to respond to them
 def send_reply():
 	reply = "Hello World"
-	req = request.json()
+	req = request.json
 	sender_id = req["sender"]["id"]
 	headers = {
 		'Content-Type': 'application/json'
