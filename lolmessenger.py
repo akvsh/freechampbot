@@ -19,7 +19,7 @@ verify_token = 'my_voice_is_my_password_verify_me'
 def auth():
 	if request.args.get('hub.verify_token') == verify_token:
 		print "Verify token matches"
-		return "Page Verified"
+		return verify_token
 	else:
 		print "Invalid token"
 		return "Page Not Verified, Invalid verify token"
