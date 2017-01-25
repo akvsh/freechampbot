@@ -17,9 +17,10 @@ verify_token = 'my_voice_is_my_password_verify_me'
 @app.route('/webhook', methods=['GET'])
 #Authenticate for Messenger
 def auth():
-	if request.args.get('hub.verify_token') == verify_token:
+	req = request.args
+	if req.get('hub.verify_token') == verify_token:
 		print "Verify token matches"
-		return verify_token
+		return req.get('hub.challenge')
 	else:
 		print "Invalid token"
 		return "Page Not Verified, Invalid verify token"
@@ -34,9 +35,6 @@ def send_reply():
 	headers = {
 		'Content-Type': 'application/json'
 	}
-	params = {
-		'access_token': page_auth_token
-	}
 	resp = {
 		'recipient': {
 			'id': sender_id
@@ -45,7 +43,7 @@ def send_reply():
 			'text': reply
 		}
 	}
-	r = requests.post('https://graph.facebook.com/v2.6/me/messages', params=params, json=resp, headers=headers)
+	r = requests.post('https://graph.facebook.com/v2.6/me/messages?access_token='+page_auth_token, json=resp, headers=headers)
 	return "Reply Sent"
 
 '''
