@@ -33,6 +33,7 @@ def auth():
 # 'help' will show certain structured messages
 def send_reply():
 	#reply = "Hello World"
+	print "test"
 	req = request.json["entry"][0]['messaging'][0]
 	print req
 	sender_id = req['sender']['id']
