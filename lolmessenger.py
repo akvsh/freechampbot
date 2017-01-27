@@ -57,7 +57,7 @@ def send_reply():
 	sender_id = req['sender']['id']
 	sender_msg = req['message']['text']
 	
-	if(sender_msg.lower() == help_txt):
+	if sender_msg.lower() == help_txt:
 		reply = """Supported messages: 
 		* 'free champs this week' to get a list of this weeks free champion pool
 		* 'is summoner [summoner_username] on' to find out if given username is online
@@ -68,7 +68,7 @@ def send_reply():
  		"""
 	elif sender_msg.lower() == "free champs this week":
 		#call riot api to get list of free champs
-		free_champs = get_free_champs()
+		#free_champs = get_free_champs()
 		reply = "free champs here"
 	else:
 		reply = sender_msg
