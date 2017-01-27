@@ -66,7 +66,7 @@ def send_reply():
 		* 'summoner stats for [summoner_username]' get some stats for given summoner
 		* 'is [server_name] server up?' check if NA/EU/etc is up
  		"""
-	else if(sender_msg.lower() == "free champs this week"):
+	elif sender_msg.lower() == "free champs this week":
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
 		reply = "free champs here"
