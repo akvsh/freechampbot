@@ -11,10 +11,10 @@ app = Flask(__name__)
 #app.config.from_pyfile('config.py')
 #NA only 
 riotapi.set_region("NA")
-riotapi.set_api_key("YOUR-API-KEY-HERE")
+riotapi.set_api_key("40073319-c490-4dca-b8cb-83c24fd00839")
 page_auth_token = 'EAAaF14INvz4BAPBZAbCZAUOpkDBlHmFxFkYaJPJ83bYeZCwH0kJbe7Ru38IkAJO7P4dFDDKqF4ZBLXb8NV4C1tU461MhSBKoJIdub3Nolrxz11DGuWkpdyGdjlOEBDLIbqqZBeNsvcstCWqtQATSsLyNtKYP8F7e385saBJDulAZDZD'
 verify_token = 'my_voice_is_my_password_verify_me'
-
+help_txt = "help"
 
 @app.route('/webhook', methods=['GET'])
 #Authenticate for Messenger
@@ -33,12 +33,22 @@ def auth():
 # 'help' will show certain structured messages
 def send_reply():
 	#reply = "Hello World"
-	print "test"
 	req = request.json["entry"][0]['messaging'][0]
 	print req
+
 	sender_id = req['sender']['id']
-	reply = req['message']['text']
-	print sender_id
+	sender_msg = req['message']['text']
+	if(sender_msg == help_txt):
+		reply = """Currently the following messages are supported: \n
+		'free champs this week' to get a list of this weeks free champion pool\n
+		'is summoner [summoner_username] on' to find out if given username is online\n
+		'champ info about [champ]' for details about given champ\n
+		'[item_name] item info for [item_name]' for details about given item\n
+		'summoner stats for [summoner_username]'
+		"""
+	else:
+		reply = req['message']['text'] #need function for format text 
+	
 	headers = {
 		'Content-Type': 'application/json'
 	}
