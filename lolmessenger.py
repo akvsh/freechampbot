@@ -43,9 +43,9 @@ def auth():
 def get_free_champs():
 	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
 	free_champs = requests.get(free_champs_url).json()["champions"]
+	print free_champs
 	#figure out how to parse and map id:name
-	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?api_key=" + riot_api_key
-	for champ in free_champs:
+	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?api_key=" + riot_api_key		
 	return free_champs
 
 
