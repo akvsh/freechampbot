@@ -55,9 +55,9 @@ def send_reply():
 	print req
 
 	sender_id = req['sender']['id']
-	sender_msg = req['message']['text'].lower()
+	sender_msg = req['message']['text']
 	
-	if(sender_msg == help_txt):
+	if(sender_msg.lower() == help_txt):
 		reply = """Supported messages: 
 		* 'free champs this week' to get a list of this weeks free champion pool
 		* 'is summoner [summoner_username] on' to find out if given username is online
@@ -66,14 +66,12 @@ def send_reply():
 		* 'summoner stats for [summoner_username]' get some stats for given summoner
 		* 'is [server_name] server up?' check if NA/EU/etc is up
  		"""
-
-	else if(sender_msg == "free champs this week"):
+	else if(sender_msg.lower() == "free champs this week"):
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
 		reply = "free champs here"
-
 	else:
-		reply = req['message']['text'] #need function for format text 
+		reply = sender_msg
 	
 	headers = {
 		'Content-Type': 'application/json'
