@@ -24,6 +24,18 @@ page_auth_token = 'EAAaF14INvz4BAPBZAbCZAUOpkDBlHmFxFkYaJPJ83bYeZCwH0kJbe7Ru38Ik
 verify_token = 'my_voice_is_my_password_verify_me'
 help_txt = "help"
 
+
+# ----- HELPER FUNCTIONS ------ #
+def get_free_champs():
+	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
+	free_champs = requests.get(free_champs_url).json()
+	#print free_champs["champions"]
+	#figure out how to parse and map id:name
+	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?api_key=" + riot_api_key		
+	#return free_champs
+
+
+
 @app.route('/webhook', methods=['GET'])
 #Authenticate for Messenger
 def auth():
@@ -40,15 +52,6 @@ def auth():
 #Messages and how to respond to them
 # 'help' will show certain structured messages
 
-def get_free_champs():
-	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
-	free_champs = requests.get(free_champs_url).json()["champions"]
-	print free_champs
-	#figure out how to parse and map id:name
-	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?api_key=" + riot_api_key		
-	return free_champs
-
-
 def send_reply():
 	#reply = "Hello World"
 	req = request.json["entry"][0]['messaging'][0]
@@ -56,8 +59,9 @@ def send_reply():
 
 	sender_id = req['sender']['id']
 	sender_msg = req['message']['text']
-	
-	if sender_msg.lower() == help_txt:
+	msg_lower = sender_msg.lower()
+
+	if msg_lower == help_txt:
 		reply = """Supported messages: 
 		* 'free champs this week' to get a list of this weeks free champion pool
 		* 'is summoner [summoner_username] on' to find out if given username is online
@@ -66,7 +70,7 @@ def send_reply():
 		* 'summoner stats for [summoner_username]' get some stats for given summoner
 		* 'is [server_name] server up?' check if NA/EU/etc is up
  		"""
-	elif sender_msg.lower() == "free champs this week":
+	elif msg_lower == "free champs this week":
 		#call riot api to get list of free champs
 		#free_champs = get_free_champs()
 		reply = "free champs here"
