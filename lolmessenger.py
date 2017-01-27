@@ -39,10 +39,9 @@ def send_reply():
 	sender_id = req['sender']['id']
 	sender_msg = req['message']['text']
 	if(sender_msg == help_txt):
-		reply = """Supported messages:\n'free champs this week' to get a list of this weeks free champion pool\n
-'is summoner [summoner_username] on' to find out if given username is online\n
-'champ info about [champ]' for details about given champ\n
-'[item_name] item info for [item_name]' for details about given item\n
+		reply = """Supported messages: 'free champs this week' to get a list of this weeks free champion pool'is summoner [summoner_username] on' to find out if given username is online
+'champ info about [champ]' for details about given champ
+'[item_name] item info for [item_name]' for details about given item
 'summoner stats for [summoner_username]'
 """
 	else:
