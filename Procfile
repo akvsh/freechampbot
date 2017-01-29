@@ -1,1 +1,1 @@
-web: gunicorn lolmessenger:app
+web: gunicorn lolmessenger:app --log-file=-
