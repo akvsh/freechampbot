@@ -46,7 +46,7 @@ def get_free_champs():
 	lst_free_champs = [champ["id"] for champ in free_champs]
 	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
 	all_champs = request.get(all_champs_url).json["data"]
-	lst_names = [all_champs[champ_id]["name"] champ_id in lst_free_champs]
+	lst_names = [all_champs[champ_id]["name"] for champ_id in lst_free_champs]
 	print lst_free_champs
 	print lst_names
 	#return free_champs
