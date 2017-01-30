@@ -84,7 +84,7 @@ def send_reply():
 	elif msg_lower == "free champs this week":
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
-		reply = "".join("- "+champ+"\n" for champ in free_champs)
+		reply = "Free champs for this week: \n" + "".join("- "+champ+"\n" for champ in free_champs)
 		#reply = "free champs here"
 	else:
 		reply = sender_msg
