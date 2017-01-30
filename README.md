@@ -1,19 +1,17 @@
 # freechampbot
 
 #*Using*
-* Python
+* Python (see requirements for full)
 * Flask
 * Messenger API
 * Heroku
+* Memcache
 
+TODO:
 
-#Game Plan
-1. Set Up
- * Create the Messenger page/app
- * Heroku app
- * Webhook
-2. Simple hello world message response
-  * i.e figure out how to get your messages to reach and respond accordingly
-3. integrate rito API
-  * API python wrapper
-  * probably need to update/make changes to heroku
+* Finish the other commands
+* Cache common requests w/ Memcache (as well as map between champ id and name)
+* Change free champ response into a list (messenger structured)
+	1. Images for each champ
+	2. Store/Cache images as well
+
