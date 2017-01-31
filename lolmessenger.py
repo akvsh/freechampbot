@@ -53,6 +53,11 @@ def get_free_champs():
 	print lst_names
 	return lst_names
 
+def get_username(msg):
+	name = sender_msg.replace("is summoner", "")
+	name = username.replace("in game", "")
+	name = username.strip()
+	return name
 
 
 @app.route('/webhook', methods=['GET'])
@@ -87,7 +92,9 @@ def send_reply():
 		free_champs = get_free_champs()
 		reply = "Free champs for this week: \n" + "".join("- "+champ+"\n" for champ in free_champs)
 	elif "is summoner" in msg_lower and "in game" in msg_lower:
-		summoner = riotapi.get_summoner_by_name(sender_msg.split()[2])
+
+		username = get_username(sender_msg)
+		summoner = riotapi.get_summoner_by_name(username)
 		curr_game = riotapi.get_current_game(summoner)
 		if curr_game is None:
 			reply = "They aren't in a game right now!"
