@@ -28,7 +28,7 @@ help_msg = """Supported messages:
 
 * 'free champs this week' - get current free champ rotation
 
-* 'is summoner [summoner_username] on' see if given username is online
+* 'is summoner [summoner_username] in game' see if given username is online
 
 * 'champ info about [champ]' for details about given champ
 
@@ -86,7 +86,7 @@ def send_reply():
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
 		reply = "Free champs for this week: \n" + "".join("- "+champ+"\n" for champ in free_champs)
-	elif "is summoner" in msg_lower and on in msg_lower:
+	elif "is summoner" in msg_lower and "in game" in msg_lower:
 		summoner = riotapi.get_summoner_by_name(sender_msg.split()[2])
 		curr_game = riotapi.get_current_game(summoner)
 		if curr_game is None:
