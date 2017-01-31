@@ -23,6 +23,7 @@ riotapi.set_api_key(riot_api_key)
 page_auth_token = 'EAAaF14INvz4BAPBZAbCZAUOpkDBlHmFxFkYaJPJ83bYeZCwH0kJbe7Ru38IkAJO7P4dFDDKqF4ZBLXb8NV4C1tU461MhSBKoJIdub3Nolrxz11DGuWkpdyGdjlOEBDLIbqqZBeNsvcstCWqtQATSsLyNtKYP8F7e385saBJDulAZDZD'
 verify_token = 'my_voice_is_my_password_verify_me'
 help_txt = "commands"
+free_champs_txt = "free champs this week"
 help_msg = """Supported messages: 
 
 * 'free champs this week' - get current free champ rotation
@@ -81,11 +82,17 @@ def send_reply():
 
 	if msg_lower == help_txt:
 		reply = help_msg
-	elif msg_lower == "free champs this week":
+	elif msg_lower == free_champs_txt:
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
 		reply = "Free champs for this week: \n" + "".join("- "+champ+"\n" for champ in free_champs)
-		#reply = "free champs here"
+	elif "is summoner" in msg_lower and on in msg_lower:
+		summoner = riotapi.get_summoner_by_name(sender_msg.split()[2])
+		curr_game = riotapi.get_current_game(summoner)
+		if curr_game is None:
+			reply = "They aren't in a game right now!"
+		else:
+			reply = "Yes! They are on :)"
 	else:
 		reply = sender_msg
 	
@@ -110,10 +117,6 @@ def send_reply():
 '''
 
 #helper functions
-def free_champs():
-	#will call riot api and return the free week champs
-
-
 def is_in_game(summoner_name):
 	#check if summoner_name is playing right now
 
