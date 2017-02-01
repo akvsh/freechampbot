@@ -18,10 +18,10 @@ Cache all the requeses using memecaches for a day
 app = Flask(__name__)
 #app.config.from_pyfile('config.py')
 #NA only 
-riot_api_key = "40073319-c490-4dca-b8cb-83c24fd00839"
+riot_api_key = os.environ['RIOT_API_KEY']
 riotapi.set_region("NA")
 riotapi.set_api_key(riot_api_key)
-page_auth_token = 'EAAaF14INvz4BAPBZAbCZAUOpkDBlHmFxFkYaJPJ83bYeZCwH0kJbe7Ru38IkAJO7P4dFDDKqF4ZBLXb8NV4C1tU461MhSBKoJIdub3Nolrxz11DGuWkpdyGdjlOEBDLIbqqZBeNsvcstCWqtQATSsLyNtKYP8F7e385saBJDulAZDZD'
+page_auth_token = os.environ['PAT']
 verify_token = 'my_voice_is_my_password_verify_me'
 help_txt = "commands"
 free_champs_txt = "free champs this week"
@@ -95,7 +95,7 @@ def send_reply():
 	elif "is summoner" in msg_lower and "in game" in msg_lower:
 
 		username = get_username(sender_msg)
-		summoner = riotapi.get_summoner_by_name(username)
+		summoner = summoner.current_game()
 		curr_game = riotapi.get_current_game(summoner)
 		if curr_game is None:
 			reply = "They aren't in a game right now!"
@@ -103,8 +103,6 @@ def send_reply():
 			champ = curr_game.participants[username].champion
 			reply = "Yes! They are in a game, currenty playing {0}".format(champ.name)
 	else:
-		print "PAT", os.environ['PAT']
-		print "RITO", os.environ['RIOT_API_KEY']
 		reply = sender_msg
 	
 	headers = {
