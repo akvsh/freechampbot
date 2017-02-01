@@ -4,6 +4,7 @@ import requests
 import json
 from cassiopeia import riotapi
 import sys
+import os
 
 
 '''-----------------
@@ -28,7 +29,7 @@ help_msg = """Supported messages:
 
 * 'free champs this week' - get current free champ rotation
 
-* 'is summoner [summoner_username] in game' see if given username is online
+* 'is summoner [summoner_username] in game' see if given username is in a game
 
 * 'champ info about [champ]' for details about given champ
 
@@ -99,8 +100,11 @@ def send_reply():
 		if curr_game is None:
 			reply = "They aren't in a game right now!"
 		else:
-			reply = "Yes! They are on :)"
+			champ = curr_game.participants[username].champion
+			reply = "Yes! They are in a game, currenty playing {0}".format(champ.name)
 	else:
+		print "PAT", os.environ['PAT']
+		print "RITO", os.environ['RIOT_API_KEY']
 		reply = sender_msg
 	
 	headers = {
