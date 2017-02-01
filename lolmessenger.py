@@ -95,7 +95,7 @@ def send_reply():
 	elif "is summoner" in msg_lower and "in game" in msg_lower:
 
 		username = get_username(sender_msg)
-		summoner = summoner.current_game()
+		summoner = username.current_game()
 		curr_game = riotapi.get_current_game(summoner)
 		if curr_game is None:
 			reply = "They aren't in a game right now!"
