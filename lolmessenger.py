@@ -100,7 +100,7 @@ def send_reply():
 		if curr_game is None:
 			reply = "They aren't in a game right now!"
 		else:
-			print curr_game.items()
+			print curr_game.to_json()
 			reply = "Yes! They are in a game, currenty playing champ"
 	else:
 		reply = sender_msg
