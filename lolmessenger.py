@@ -68,8 +68,9 @@ def get_server(msg):
 	return server
 
 def get_server_status():
-	services = riotapi.get_shard()["services"]
-	status = [service["name"]+":"+service["status"]+"\n" for service in services]
+	services = riotapi.get_shard()
+	print services
+	status = [service["name"]+":"+service["status"]+"\n" for service in services["services"]]
 	return status
 
 @app.route('/webhook', methods=['GET'])
@@ -99,7 +100,7 @@ def send_reply():
 
 	if msg_lower == help_txt:
 		reply = help_msg
-		
+
 	elif msg_lower == free_champs_txt:
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
