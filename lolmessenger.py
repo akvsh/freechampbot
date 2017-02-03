@@ -33,11 +33,11 @@ help_msg = """Supported messages:
 
 * 'champ info about [champ]' for details about given champ
 
-* '[item_name] item info for [item_name]' for details about given item
-
 * 'summoner stats for [summoner_username]' get some stats for given summoner
 
 * 'is [server_name] server up?' check if NA/EU/etc is up
+
+* 'set region [region]' if you're looking for players/stats in another region
 """
 
 
@@ -60,6 +60,17 @@ def get_username(msg):
 	name = name.strip()
 	return name
 
+def get_server(msg):
+	server = msg.replace("server up?","")
+	server = server.replace("is","")
+	server = server.strip()
+	server = server.upper()
+	return server
+
+def get_server_status():
+	services = riotapi.get_shard()["services"]
+	status = [service["name"]+":"+service["status"]+"\n" for service in services]
+	return status
 
 @app.route('/webhook', methods=['GET'])
 #Authenticate for Messenger
@@ -88,20 +99,28 @@ def send_reply():
 
 	if msg_lower == help_txt:
 		reply = help_msg
+		
 	elif msg_lower == free_champs_txt:
 		#call riot api to get list of free champs
 		free_champs = get_free_champs()
 		reply = "Free champs for this week: \n" + "".join("- "+champ+"\n" for champ in free_champs)
-	elif "is summoner" in msg_lower and "in game" in msg_lower:
 
+	elif "is summoner" in msg_lower and "in game" in msg_lower:
 		username = get_username(sender_msg)
 		user = riotapi.get_summoner_by_name(username)
 		curr_game = riotapi.get_current_game(user)
 		if curr_game is None:
 			reply = "They aren't in a game right now!"
 		else:
-			print curr_game.champion_ids()
-			reply = "Yes! They are in a game, currenty playing champ"
+			reply = "Yes! They are in a game :)"
+
+	elif "server up?" in msg_lower:
+		server = get_server(sender_msg)
+		riotapi.set_region(server)
+		serv_status = get_server_status()
+		riotapi.set_region("NA")
+		reply = "".join(serv_status)
+
 	else:
 		reply = sender_msg
 	
