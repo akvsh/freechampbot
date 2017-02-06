@@ -73,7 +73,7 @@ def get_server_status():
 	print servs
 	for x in servs:
 		print x, "Status", x["status"]
-	print servs2:
+	print servs2
 	print servs
 	status = []
 	#status = {service["name"]:+service["status"] for service in servs}
