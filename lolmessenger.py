@@ -68,10 +68,12 @@ def get_server(msg):
 	return server
 
 def get_server_status():
-	servs = riotapi.get_shard().to_json()
+	servs = riotapi.get_shard()
+	for x in servs:
+		print x
 	print servs
-	print servs["services"]
-	status = {service["name"]:+service["status"] for service in servs}
+	status = []
+	#status = {service["name"]:+service["status"] for service in servs}
 	return status
 
 @app.route('/webhook', methods=['GET'])
