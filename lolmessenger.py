@@ -70,10 +70,10 @@ def get_server(msg):
 def get_server_status():
 	servs = riotapi.get_shard()
 	servs2 = servs.to_json()
+	print servs
 	for x in servs:
-		print x
-	for y in servs2:
-		print y
+		print x, "Status", x["status"]
+	print servs2:
 	print servs
 	status = []
 	#status = {service["name"]:+service["status"] for service in servs}
