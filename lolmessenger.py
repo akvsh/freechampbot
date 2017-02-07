@@ -118,10 +118,16 @@ def send_reply():
 
 	elif "server up?" in msg_lower:
 		server = get_server(sender_msg)
-		riotapi.set_region(server)
-		serv_status = get_server_status()
-		riotapi.set_region("NA")
-		reply = "".join(serv_status)
+		reply = "Invalid Region!"
+		try:
+			riotapi.set_region(server)
+		except:
+			pass
+		else:
+			serv_status = get_server_status()
+			reply = "".join(serv_status)
+		finally:
+			riotapi.set_region("NA")
 
 	else:
 		reply = sender_msg
