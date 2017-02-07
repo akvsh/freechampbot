@@ -72,7 +72,7 @@ def get_server_status():
 	servs2 = servs.to_json()
 	print servs
 	for x in servs:
-		print x, "Status", x["status"]
+		print x
 	print servs2
 	print servs
 	status = []
