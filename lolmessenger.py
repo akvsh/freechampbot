@@ -68,13 +68,9 @@ def get_server(msg):
 	return server
 
 def get_server_status():
-	servs = riotapi.get_shard()
-	servs2 = servs.to_json()
-	print servs
-	for x in servs:
-		print x
+	servs2 = json.loads(riotapi.get_shard().to_json())
 	print servs2
-	print servs
+	print servs2["hostname"]
 	status = []
 	#status = {service["name"]:+service["status"] for service in servs}
 	return status
