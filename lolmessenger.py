@@ -54,13 +54,15 @@ def get_free_champs():
 	return lst_names
 
 def get_username(msg):
-	name = msg.replace("is summoner", "")
+	name = msg.lower()
+	name = name.replace("is summoner", "")
 	name = name.replace("in game", "")
 	name = name.strip()
 	return name
 
 def get_server(msg):
-	server = msg.replace("server up?","")
+	server = msg.lower()
+	server = server.replace("server up?","")
 	server = server.replace("is","")
 	server = server.strip()
 	server = server.upper()
