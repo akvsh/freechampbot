@@ -54,8 +54,7 @@ def get_free_champs():
 	return lst_names
 
 def get_username(msg):
-	name = msg.lower()
-	name = name.replace("is summoner", "")
+	name = msg.replace("is summoner", "")
 	name = name.replace("in game", "")
 	name = name.strip()
 	return name
@@ -116,6 +115,7 @@ def send_reply():
 
 	elif "is summoner" in msg_lower and "in game" in msg_lower:
 		username = get_username(sender_msg)
+		print "U:",username
 		try:
 			user = riotapi.get_summoner_by_name(username)
 		except:
