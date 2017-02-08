@@ -70,7 +70,13 @@ def get_server_status():
 	servs = json.loads(riotapi.get_shard().to_json())
 	print servs
 	status = []
-	status = [service["name"]+": "+service["status"]+"\n" for service in servs["services"]]
+	for service in servs["services"]:
+		status.append(service["name"]+ " - " + service["status"] + "\n")
+		if len(service["incidents"]) == 0:
+			for update in service["incidents"]:
+				status.append("\t *" + update["content"] + "\n")
+
+	#status = [service["name"]+": "+service["status"]+"\n" for service in servs["services"]]
 	return status
 
 @app.route('/webhook', methods=['GET'])
