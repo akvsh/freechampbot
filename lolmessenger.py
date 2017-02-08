@@ -109,25 +109,39 @@ def send_reply():
 
 	elif "is summoner" in msg_lower and "in game" in msg_lower:
 		username = get_username(sender_msg)
-		user = riotapi.get_summoner_by_name(username)
-		curr_game = riotapi.get_current_game(user)
-		if curr_game is None:
-			reply = "They aren't in a game right now!"
-		else:
-			reply = "Yes! They are in a game :)"
+		try:
+			user = riotapi.get_summoner_by_name(username)
+		except:
+			reply = "This player doesn't exist in this region!"
+			curr_game = riotapi.get_current_game(user)
+		else:		
+			if curr_game is None:
+				reply = "They aren't in a game right now!"
+			else:
+				reply = "Yes! They are in a game :)"
 
 	elif "server up?" in msg_lower:
 		server = get_server(sender_msg)
-		reply = "Invalid Region!"
 		try:
 			riotapi.set_region(server)
 		except:
-			pass
+			reply = "Invalid Region!"
 		else:
 			serv_status = get_server_status()
 			reply = "".join(serv_status)
 		finally:
 			riotapi.set_region("NA")
+
+	elif "set region" in msg_lower:
+		server = sender_msg.replace("set region ", "")
+		server = server.strip()
+		server = server.upper()
+		try:
+			riotapi.set_region(server)
+		except:
+			reply = "Invalid Region!"
+		else:
+			reply = "Region set to " + server
 
 	else:
 		reply = sender_msg
