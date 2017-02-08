@@ -28,7 +28,7 @@ help_msg = """Supported messages:
 
 * 'free champs this week' - get current free champ rotation
 
-* 'is summoner [summoner_username] in game' see if given username is in a game
+* 'is summoner [summoner_username] in game?' see if given username is in a game
 
 * 'champ info about [champ]' for details about given champ
 
@@ -54,8 +54,9 @@ def get_free_champs():
 	return lst_names
 
 def get_username(msg):
-	name = msg.replace("is summoner", "")
-	name = name.replace("in game", "")
+	name = msg.lower()
+	name = name.replace("is summoner", "")
+	name = name.replace("in game?", "")
 	name = name.strip()
 	return name
 
