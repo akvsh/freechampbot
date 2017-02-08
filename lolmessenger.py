@@ -74,7 +74,7 @@ def get_server_status():
 		status.append(service["name"]+ " - " + service["status"] + "\n")
 		if len(service["incidents"]) != 0:
 			for update in service["incidents"]:
-				status.append("\t *" + update["updates"]["content"] + "\n")
+				status.append("\t *" + update["updates"][0]["content"] + "\n")
 
 	#status = [service["name"]+": "+service["status"]+"\n" for service in servs["services"]]
 	return status
