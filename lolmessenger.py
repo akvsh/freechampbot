@@ -11,13 +11,12 @@ import os
 TODO
 Store in DB (or in a file) mapping between all champs and their id so its faster to access
 Cache all the requeses using memecaches for a day
+Find a better way to check the type of message
 '''
 
 
 #setup + auth tokens
 app = Flask(__name__)
-#app.config.from_pyfile('config.py')
-#NA only 
 riot_api_key = os.environ['RIOT_API_KEY']
 riotapi.set_region("NA")
 riotapi.set_api_key(riot_api_key)
@@ -113,8 +112,8 @@ def send_reply():
 			user = riotapi.get_summoner_by_name(username)
 		except:
 			reply = "This player doesn't exist in this region!"
-			curr_game = riotapi.get_current_game(user)
 		else:		
+			curr_game = riotapi.get_current_game(user)
 			if curr_game is None:
 				reply = "They aren't in a game right now!"
 			else:
@@ -165,12 +164,6 @@ def send_reply():
 	return "Reply Sent"
 
 '''
-
-#helper functions
-def is_in_game(summoner_name):
-	#check if summoner_name is playing right now
-
-
 #not a priority, get above two working first
 def champ_mastery(summoner_name, champ=None):
 	#top 3 champ masteries of summoner_name (Default)
