@@ -59,7 +59,7 @@ def get_username(msg):
 	name = msg.lower()
 	name = name.replace("is summoner", "")
 	name = name.replace("in game?", "")
-	name = name.replace("champ masteries for summoner", "")
+	name = name.replace("champ masteries for", "")
 	name = name.replace("champion", "")
 	name = name.strip()
 	return name
