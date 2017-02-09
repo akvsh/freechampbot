@@ -30,7 +30,9 @@ help_msg = """Supported messages:
 
 * 'is summoner [summoner_username] in game?' see if given username is in a game
 
-* 'champ info about [champ]' for details about given champ
+* 'top champ masteries for [summoner_username]' top 3 champion masteries for given summoner
+
+* '[summoner_username] mastery of champion [champion_name]'
 
 * 'summoner stats for [summoner_username]' get some stats for given summoner
 
@@ -57,8 +59,18 @@ def get_username(msg):
 	name = msg.lower()
 	name = name.replace("is summoner", "")
 	name = name.replace("in game?", "")
+	name = name.replace("champ masteries for summoner", "")
+	name = name.replace("champion", "")
 	name = name.strip()
 	return name
+
+def get_champion_name(msg, username):
+	champ = msg.lower()
+	champ = champ.replace("mastery of champion", "")
+	champ = champ.replace(username, "")
+	champ = champ.strip()
+	return champ
+
 
 def get_server(msg):
 	server = msg.lower()
@@ -139,6 +151,29 @@ def send_reply():
 			reply = "".join(serv_status)
 		finally:
 			riotapi.set_region("NA")
+
+	elif "top champ masteries for summoner" in msg_lower:
+		username = get_username(sender_msg)
+		try:
+			masteries = riotapi.champion_mastery(username)
+		except:
+			reply = "This player doesn't exist in this region!"
+		else:		
+			reply = "Top masteries here!"
+			print masteries
+			
+	elif "mastery of champ" in msg_lower:
+		username = get_username(sender_msg)
+		champ_name = get_champion_name(sender_msg, username)
+		print "User: " + username + ", Champ: " + champ_name
+		try:
+			champ_mastery = json.loads(riotapi.get_champion_mastery(username, champ_name).to_json())
+		except:
+			reply = "Invalid username or champion!"
+		else:	
+			reply = "Mastery here"
+			print champ_mastery
+
 
 	elif "set region" in msg_lower:
 		server = sender_msg.replace("set region ", "")
