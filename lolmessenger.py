@@ -152,7 +152,7 @@ def send_reply():
 		finally:
 			riotapi.set_region("NA")
 
-	elif "top champ masteries for summoner" in msg_lower:
+	elif "top champ masteries for" in msg_lower:
 		username = get_username(sender_msg)
 		try:
 			masteries = riotapi.champion_mastery(username)
