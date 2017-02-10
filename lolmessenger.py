@@ -32,7 +32,7 @@ help_msg = """Supported messages:
 
 * 'top champ masteries for [summoner_username]' top 3 champion masteries for given summoner
 
-* '[summoner_username] mastery of champion [champion_name]'
+* 'summoner [summoner_username] mastery of champion [champion_name]'
 
 * 'summoner stats for [summoner_username]' get some stats for given summoner
 
