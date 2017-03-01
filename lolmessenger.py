@@ -170,7 +170,7 @@ def send_reply():
 				print(champ)
 				champ_id = str(champ["championId"])
 				print(champ_id)
-				print(all_champs[champ_ids])
+				print(all_champs[champ_ids]['name'])
 				champ_name = all_champs[str(champ["championId"])]['key']
 				print(champ_name)
 				print(champ.level)
