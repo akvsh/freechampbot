@@ -35,15 +35,15 @@ NOTE: The square brackets are required around the fields
 
 * 'free champs this week' - get current free champ rotation
 
-* 'is summoner [summoner_username] in game?' see if given username is in a game
+* 'is summoner [summoner_username] in game?' see if summoner_username is in a game
 
-* 'top champ masteries for [summoner_username]' top 3 champion masteries for given summoner
+* 'top champ masteries for [summoner_username]' top 3 champion masteries for summoner_username
 
-* 'summoner [summoner_username] mastery of champion [champion_name]'
+* 'summoner [summoner_username] mastery of champion [champion_name]' get champion_name masteries for summoner_username
 
-* 'summoner stats for [summoner_username]' get some stats for given summoner
+* 'summoner stats for [summoner_username]' some simple stats for summoner_username
 
-* 'is [server_name] server up?' check if NA/EU/etc is up
+* 'is [server_name] server up?' check if given server_name is up
 
 * 'set region [region]' if you're looking for players/stats in another region
 """
@@ -162,7 +162,7 @@ def send_reply():
 		username = get_username(sender_msg)
 		print("Username for masteries: " + username)
 		try:
-			masteries = riotapi.get_champion_mastery(username)
+			masteries = riotapi.get_champion_masteries(username)
 			total_mastery_score = riotapi.get_champion_mastery_score(username)
 		except:
 			reply = "This player doesn't exist in this region!" + invalid_cmd_error
