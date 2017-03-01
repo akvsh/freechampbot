@@ -9,9 +9,12 @@ import os
 
 '''-----------------
 TODO
-Store in DB (or in a file) mapping between all champs and their id so its faster to access
-Cache all the requeses using memecaches for a day
+Make a request once every few weeks to get champ to id mapping
+For free champ request, store the result in db
+Connect redis to the db and then cache the data 
 Find a better way to check the type of message
+Add a set username command, remove the summoner parts for all other commands (Easier to parse)
+finish the commands by monday
 '''
 
 
@@ -25,6 +28,7 @@ verify_token = 'my_voice_is_my_password_verify_me'
 help_txt = "commands"
 free_champs_txt = "free champs this week"
 help_msg = """Supported messages: 
+NOTE: The square brackets are required around the fields
 
 * 'free champs this week' - get current free champ rotation
 
@@ -48,41 +52,43 @@ def get_free_champs():
 	free_champs = requests.get(free_champs_url).json()["champions"]
 	#print free_champs
  	lst_free_champs = [champ["id"] for champ in free_champs]
-	print lst_free_champs
+	print(lst_free_champs)
 	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
 	all_champs = requests.get(all_champs_url).json()["data"]
+	print(all_champs)
 	lst_names = [all_champs[str(champ_id)]["name"] for champ_id in lst_free_champs]
-	print lst_names
+	print(lst_names)
 	return lst_names
 
+
+#Three can be abstracted to one function
 def get_username(msg):
+	# make a list of common terms to remove/replace and iterate trought it
 	name = msg.lower()
-	name = name.replace("is summoner", "")
-	name = name.replace("in game?", "")
-	name = name.replace("champ masteries for", "")
-	name = name.replace("champion", "")
-	name = name.strip()
+	index1 = name.index("[")
+	index2 = name.index("]")
+	name = name[index1+1:index2]
 	return name
 
 def get_champion_name(msg, username):
 	champ = msg.lower()
-	champ = champ.replace("mastery of champion", "")
-	champ = champ.replace(username, "")
-	champ = champ.strip()
+	start_index = champ.index("champion")
+	index1 = champ.index("[", start_index)
+	index2 = champ.index("]", start_index)
+	champ = champ[index1+1:index2]
 	return champ
 
 
 def get_server(msg):
 	server = msg.lower()
-	server = server.replace("server up?","")
-	server = server.replace("is","")
-	server = server.strip()
-	server = server.upper()
+	index1 = server.index("[")
+	index2 = server.index("]")
+	server = server[index1+1:index2]
 	return server
 
 def get_server_status():
 	servs = json.loads(riotapi.get_shard().to_json())
-	print servs
+	print(servs)
 	status = []
 	for service in servs["services"]:
 		status.append("\n" + service["name"]+ " - " + service["status"] + "\n")
@@ -98,10 +104,10 @@ def get_server_status():
 def auth():
 	req = request.args
 	if req.get('hub.verify_token') == verify_token:
-		print "Verify token matches"
+		print("Verify token matches")
 		return req.get('hub.challenge')
 	else:
-		print "Invalid token"
+		print("Invalid token")
 		return "Page Not Verified, Invalid verify token"
 
 
@@ -112,7 +118,7 @@ def auth():
 def send_reply():
 	#reply = "Hello World"
 	req = request.json["entry"][0]['messaging'][0]
-	print req
+	print(req)
 
 	sender_id = req['sender']['id']
 	sender_msg = req['message']['text']
@@ -128,7 +134,7 @@ def send_reply():
 
 	elif "is summoner" in msg_lower and "in game" in msg_lower:
 		username = get_username(sender_msg)
-		print "U:",username
+		print("U: " + username)
 		try:
 			user = riotapi.get_summoner_by_name(username)
 		except:
@@ -160,31 +166,32 @@ def send_reply():
 			reply = "This player doesn't exist in this region!"
 		else:		
 			reply = "Top masteries here!"
-			print masteries
+			print(masteries) 
 			
 	elif "mastery of champ" in msg_lower:
 		username = get_username(sender_msg)
 		champ_name = get_champion_name(sender_msg, username)
-		print "User: " + username + ", Champ: " + champ_name
+		print("User: " + username + ", Champ: " + champ_name)
 		try:
 			champ_mastery = json.loads(riotapi.get_champion_mastery(username, champ_name).to_json())
 		except:
 			reply = "Invalid username or champion!"
 		else:	
 			reply = "Mastery here"
-			print champ_mastery
+			print(champ_mastery)
 
 
 	elif "set region" in msg_lower:
-		server = sender_msg.replace("set region ", "")
-		server = server.strip()
-		server = server.upper()
+		region = msg.lower()
+		index1 = region.index("[")
+		index2 = region.index("]")
+		region = region[index1+1:index2]
 		try:
-			riotapi.set_region(server)
+			riotapi.set_region(region)
 		except:
 			reply = "Invalid Region!"
 		else:
-			reply = "Region set to " + server
+			reply = "Region set to " + region
 
 	else:
 		reply = sender_msg
