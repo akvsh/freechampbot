@@ -163,7 +163,7 @@ def send_reply():
 		summoner = riotapi.get_summoner_by_name(username)
 		print("Username for masteries: " + username)
 		try:
-			masteries = riotapi.get_champion_masteries(summoner)
+			masteries = riotapi.get_top_champion_masteries(summoner)
 			total_mastery_score = riotapi.get_champion_mastery_score(summoner)
 		except:
 			reply = "This player doesn't exist in this region!" + invalid_cmd_error
