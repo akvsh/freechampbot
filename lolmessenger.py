@@ -33,17 +33,17 @@ all_champs = requests.get(all_champs_url).json()["data"]
 help_msg = """Supported messages: 
 NOTE: The square brackets are required around the fields
 
-* 'free champs this week' - get current free champ rotation
+* 'free champs this week'
 
-* 'is summoner [summoner_username] in game?' see if summoner_username is in a game
+* 'is summoner [summoner_username] in game?'
 
-* 'top champ masteries for [summoner_username]' top 3 champion masteries for summoner_username
+* 'top champ masteries for [summoner_username]'
 
-* 'summoner [summoner_username] mastery of champion [champion_name]' get champion_name masteries for summoner_username
+* 'summoner [summoner_username] mastery of champion [champion_name]'
 
-* 'summoner stats for [summoner_username]' some simple stats for summoner_username
+* 'summoner stats for [summoner_username]'
 
-* 'is [server_name] server up?' check if given server_name is up
+* 'is [server_name] server up?'
 
 * 'set region [region]' if you're looking for players/stats in another region
 """
