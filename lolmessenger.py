@@ -51,6 +51,7 @@ NOTE: The square brackets are required around the fields
 
 # ----- HELPER FUNCTIONS ------ #
 def get_free_champs():
+	print(all_champs)
 	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
 	free_champs = requests.get(free_champs_url).json()["champions"]
 	#print free_champs
@@ -164,6 +165,9 @@ def send_reply():
 		print("Username for masteries: " + username)
 		try:
 			masteries = riotapi.get_top_champion_masteries(summoner)
+			for champ in masteries:
+				print(champ.to_json())
+				print(champ.level)
 			total_mastery_score = riotapi.get_champion_mastery_score(summoner)
 		except:
 			reply = "This player doesn't exist in this region!" + invalid_cmd_error
