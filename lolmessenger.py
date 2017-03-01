@@ -165,13 +165,14 @@ def send_reply():
 		print("Username for masteries: " + username)
 		try:
 			masteries = riotapi.get_top_champion_masteries(summoner)
-			for champ in masteries:
-				print(json.loads(champ.to_json()))
+			for c in masteries:
+				champ = json.loads(c.to_json())
+				print(champ)
 				champ_id = str(champ["championId"])
 				print(champ_id)
 				print(all_champs[champ_ids])
-				#champ_name = all_champs[str(champ["championId"])]['key']
-				#print(champ_name)
+				champ_name = all_champs[str(champ["championId"])]['key']
+				print(champ_name)
 				print(champ.level)
 			total_mastery_score = riotapi.get_champion_mastery_score(summoner)
 		except:
