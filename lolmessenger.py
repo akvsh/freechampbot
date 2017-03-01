@@ -45,7 +45,7 @@ NOTE: The square brackets are required around the fields
 
 * 'is [server_name] server up?'
 
-* 'set region [region]' if you're looking for players/stats in another region
+* 'set region [region]' for player stats in other regions run this first
 """
 
 
@@ -160,14 +160,16 @@ def send_reply():
 
 	elif "top champ masteries" in msg_lower:
 		username = get_username(sender_msg)
+		summoner = riotapi.get_summoner_by_name(username)
 		print("Username for masteries: " + username)
 		try:
-			masteries = riotapi.get_champion_masteries(username)
-			total_mastery_score = riotapi.get_champion_mastery_score(username)
+			masteries = riotapi.get_champion_masteries(summoner)
+			total_mastery_score = riotapi.get_champion_mastery_score(summoner)
 		except:
 			reply = "This player doesn't exist in this region!" + invalid_cmd_error
 		else:		
 			reply = "Top masteries here!"
+			print("Total Mastery Score: " +  str(total_mastery_score))
 			print(masteries) 
 			
 	elif "mastery of champ" in msg_lower:
