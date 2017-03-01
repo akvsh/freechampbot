@@ -29,7 +29,7 @@ help_txt = "commands"
 free_champs_txt = "free champs this week"
 invalid_cmd_error = " Or your command was invalid, type in 'commands' to get a full list of available commands!"
 all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
-all_champs = requests.get(all_champs_url).json()["data"]
+all_champs = json.loads(requests.get(all_champs_url).json())["data"]
 help_msg = """Supported messages: 
 NOTE: The square brackets are required around the fields
 
