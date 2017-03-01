@@ -27,6 +27,9 @@ page_auth_token = os.environ['PAT']
 verify_token = 'my_voice_is_my_password_verify_me'
 help_txt = "commands"
 free_champs_txt = "free champs this week"
+invalid_cmd_error = " Or your command was invalid, type in 'commands' to get a full list of available commands!"
+all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
+all_champs = requests.get(all_champs_url).json()["data"]
 help_msg = """Supported messages: 
 NOTE: The square brackets are required around the fields
 
@@ -53,9 +56,6 @@ def get_free_champs():
 	#print free_champs
  	lst_free_champs = [champ["id"] for champ in free_champs]
 	print(lst_free_champs)
-	all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
-	all_champs = requests.get(all_champs_url).json()["data"]
-	print(all_champs)
 	lst_names = [all_champs[str(champ_id)]["name"] for champ_id in lst_free_champs]
 	print(lst_names)
 	return lst_names
@@ -138,7 +138,7 @@ def send_reply():
 		try:
 			user = riotapi.get_summoner_by_name(username)
 		except:
-			reply = "This player doesn't exist in this region!"
+			reply = "This player doesn't exist in this region!" + invalid_cmd_error
 		else:		
 			curr_game = riotapi.get_current_game(user)
 			if curr_game is None:
@@ -151,19 +151,21 @@ def send_reply():
 		try:
 			riotapi.set_region(server)
 		except:
-			reply = "Invalid Region!"
+			reply = "Invalid Region!" + invalid_cmd_error
 		else:
 			serv_status = get_server_status()
 			reply = "".join(serv_status)
 		finally:
 			riotapi.set_region("NA")
 
-	elif "top champ masteries for" in msg_lower:
+	elif "top champ masteries" in msg_lower:
 		username = get_username(sender_msg)
+		print("Username for masteries: " + username)
 		try:
-			masteries = riotapi.champion_mastery(username)
+			masteries = riotapi.get_champion_mastery(username)
+			total_mastery_score = riotapi.get_champion_mastery_score(username)
 		except:
-			reply = "This player doesn't exist in this region!"
+			reply = "This player doesn't exist in this region!" + invalid_cmd_error
 		else:		
 			reply = "Top masteries here!"
 			print(masteries) 
@@ -175,7 +177,7 @@ def send_reply():
 		try:
 			champ_mastery = json.loads(riotapi.get_champion_mastery(username, champ_name).to_json())
 		except:
-			reply = "Invalid username or champion!"
+			reply = "Invalid username/champion!" + invalid_cmd_error
 		else:	
 			reply = "Mastery here"
 			print(champ_mastery)
@@ -189,7 +191,7 @@ def send_reply():
 		try:
 			riotapi.set_region(region)
 		except:
-			reply = "Invalid Region!"
+			reply = "Invalid Region!" + invalid_cmd_error
 		else:
 			reply = "Region set to " + region
 
