@@ -29,7 +29,7 @@ help_txt = "commands"
 free_champs_txt = "free champs this week"
 invalid_cmd_error = " Or your command was invalid, type in 'commands' to get a full list of available commands!"
 all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
-all_champs = json.loads(requests.get(all_champs_url).json())["data"]
+all_champs = requests.get(all_champs_url).json()["data"]
 help_msg = """Supported messages: 
 NOTE: The square brackets are required around the fields
 
@@ -71,7 +71,7 @@ def get_username(msg):
 	name = name[index1+1:index2]
 	return name
 
-def get_champion_name(msg, username):
+def get_champion_name(msg):
 	champ = msg.lower()
 	start_index = champ.index("champion")
 	index1 = champ.index("[", start_index)
@@ -184,7 +184,7 @@ def send_reply():
 			
 	elif "mastery of champ" in msg_lower:
 		username = get_username(sender_msg)
-		champ_name = get_champion_name(sender_msg, username)
+		champ_name = get_champion_name(sender_msg)
 		print("User: " + username + ", Champ: " + champ_name)
 		try:
 			champ_mastery = json.loads(riotapi.get_champion_mastery(username, champ_name).to_json())
