@@ -166,9 +166,10 @@ def send_reply():
 		try:
 			masteries = riotapi.get_top_champion_masteries(summoner)
 			for c in masteries:
-				champ = c.to_json()
-				print(champ)
-				print(type(champ))
+				print(c.to_json())
+				champ = json.loads(c.to_json())
+				champ_id = str(champ["championId"])
+				print("champ_id: " + champ_id)
 			total_mastery_score = riotapi.get_champion_mastery_score(summoner)
 		except:
 			reply = "This player doesn't exist in this region!" + invalid_cmd_error
