@@ -171,7 +171,7 @@ def send_reply():
 				champ_id = str(champ['championId'])
 				print("champ_id: " + champ_id)
 				champ_name = all_champs[champ_id]['name']
-				reply += "Champion: " + champ_name + "\n" 
+				reply += champ_name + "\n" 
 				champ_level = str(champ['championLevel'])
 				reply += "- Level: " +  champ_level + "\n"
 				champ_points = str(champ['championPoints'])
