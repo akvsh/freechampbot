@@ -163,19 +163,25 @@ def send_reply():
 		username = get_username(sender_msg)
 		summoner = riotapi.get_summoner_by_name(username)
 		print("Username for masteries: " + username)
+		reply = ""
 		try:
 			masteries = riotapi.get_top_champion_masteries(summoner)
 			for c in masteries:
 				champ = json.loads(c.to_json())
-				champ_id = str(champ["championId"])
+				champ_id = str(champ['championId'])
 				print("champ_id: " + champ_id)
 				champ_name = all_champs[champ_id]['name']
+				reply += "Champion: " + champ_name + "\n" 
+				champ_level = str(champ['championLevel'])
+				reply += "- Level: " +  champ_level + "\n"
+				champ_points = str(champ['championPoints'])
+				reply += "- Total Points: " +  champ_points + "\n"
 				print("champ_name: " + champ_name)
 			total_mastery_score = riotapi.get_champion_mastery_score(summoner)
 		except:
 			reply = "This player doesn't exist in this region!" + invalid_cmd_error
 		else:		
-			reply = "Top masteries here!"
+			reply += "Total Mastery Score: " +  str(total_mastery_score)
 			print("Total Mastery Score: " +  str(total_mastery_score))
 			print(masteries) 
 			
