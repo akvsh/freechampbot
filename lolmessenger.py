@@ -167,7 +167,6 @@ def send_reply():
 			masteries = riotapi.get_top_champion_masteries(summoner)
 			for c in masteries:
 				champ = json.loads(c.to_json())
-				print(champ)
 				champ_id = str(champ["championId"])
 				print("champ_id: " + champ_id + ", type: " + type(champ_id))
 				#champ_name = all_champs[champ_id]['name']
