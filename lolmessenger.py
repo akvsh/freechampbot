@@ -191,9 +191,7 @@ def send_reply():
 			print("getting champ_mastery")
 			champ_mastery = riotapi.get_champion_mastery(summoner, champion)
 			print("to json")
-			print(champ_mastery.to_json())
 		except:
-			print(champ_mastery)
 			reply = "Invalid username/champion!" + invalid_cmd_error
 		else:	
 			reply = "Mastery here"
