@@ -11,9 +11,6 @@ import os
 TODO
 Make a request once every few weeks to get champ to id mapping
 For free champ request, store the result in db
-Connect redis to the db and then cache the data 
-Find a better way to check the type of message
-Add a set username command, remove the summoner parts for all other commands (Easier to parse)
 finish the commands by monday
 '''
 
@@ -30,6 +27,7 @@ free_champs_txt = "free champs this week"
 invalid_cmd_error = " Or your command was invalid, type in 'commands' to get a full list of available commands!"
 all_champs_url = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?dataById=true&api_key=" + riot_api_key
 all_champs = requests.get(all_champs_url).json()["data"]
+champ_to_id = {}
 help_msg = """Supported messages: 
 NOTE: The square brackets are required around the fields
 
@@ -40,8 +38,6 @@ NOTE: The square brackets are required around the fields
 * 'top champ masteries for [summoner_username]'
 
 * 'summoner [summoner_username] mastery of champion [champion_name]'
-
-* 'summoner stats for [summoner_username]'
 
 * 'is [server_name] server up?'
 
@@ -183,14 +179,15 @@ def send_reply():
 		else:		
 			reply += "Total Mastery Score: " +  str(total_mastery_score)
 			print("Total Mastery Score: " +  str(total_mastery_score))
-			print(masteries) 
 			
-	elif "mastery of champ" in msg_lower:
+	elif "mastery of champion" in msg_lower:
 		username = get_username(sender_msg)
+		summoner = riotapi.get_summoner_by_name(username)
 		champ_name = get_champion_name(sender_msg)
+		champion = riotapi.get_champion_by_name(champ_name)
 		print("User: " + username + ", Champ: " + champ_name)
 		try:
-			champ_mastery = json.loads(riotapi.get_champion_mastery(username, champ_name).to_json())
+			champ_mastery = json.loads(riotapi.get_champion_mastery(summoner, champion).to_json())
 		except:
 			reply = "Invalid username/champion!" + invalid_cmd_error
 		else:	
