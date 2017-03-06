@@ -64,7 +64,7 @@ def get_username(msg):
 	name = msg.lower()
 	index1 = name.index("[")
 	index2 = name.index("]")
-	name = name[index1+1:index2]
+	name = msg[index1+1:index2]
 	return name
 
 def get_champion_name(msg):
@@ -72,7 +72,7 @@ def get_champion_name(msg):
 	start_index = champ.index("champion")
 	index1 = champ.index("[", start_index)
 	index2 = champ.index("]", start_index)
-	champ = champ[index1+1:index2]
+	champ = msg[index1+1:index2]
 	return champ
 
 
@@ -80,7 +80,7 @@ def get_server(msg):
 	server = msg.lower()
 	index1 = server.index("[")
 	index2 = server.index("]")
-	server = server[index1+1:index2]
+	server = msg[index1+1:index2]
 	return server
 
 def get_server_status():
@@ -183,13 +183,15 @@ def send_reply():
 	elif "mastery of champion" in msg_lower:
 		username = get_username(sender_msg)
 		summoner = riotapi.get_summoner_by_name(username)
+		print(json.loads(summoner.to_json()))
 		champ_name = get_champion_name(sender_msg)
-		champion = riotapi.get_champion_by_name(champ_name)
+		champ = riotapi.get_champion_by_name(champ_name)
+		print(json.loads(champ.to_json()))
 		print("User: " + username)
 		print("Champ: " + champ_name)
 		try:
 			print("getting champ_mastery")
-			champ_mastery = riotapi.get_champion_mastery(summoner, champion)
+			champ_mastery = riotapi.get_champion_mastery(summoner, champ)
 			print("to json")
 		except:
 			reply = "Invalid username/champion!" + invalid_cmd_error
