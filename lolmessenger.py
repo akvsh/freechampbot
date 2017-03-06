@@ -193,6 +193,7 @@ def send_reply():
 			print("to json")
 			print(champ_mastery.to_json())
 		except:
+			print(champ_mastery)
 			reply = "Invalid username/champion!" + invalid_cmd_error
 		else:	
 			reply = "Mastery here"
