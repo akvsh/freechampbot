@@ -59,7 +59,7 @@ class Champ(Base):
 
 Session = sessionmaker(db)
 session = Session()
-base.metadata.create_all(db)
+Base.metadata.create_all(db)
 
 # ----- HELPER FUNCTIONS ------ #
 
