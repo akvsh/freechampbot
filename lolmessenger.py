@@ -71,11 +71,13 @@ def get_free_champs_lst():
 	return lst_free_champs
 
 def update_free_champs_db(free_champs_ids):
+	names_lst = []
 	for c_id in free_champs_ids:
 			champ = session.query(Champ).filter_by(champ_id = c_id).first()
 			champ.is_free = True
 			session.commit()
 			names_lst.append(champ.champ_name)
+	return names_lst
 
 def get_free_champs():
 	print(all_champs)
