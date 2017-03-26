@@ -64,6 +64,7 @@ Base.metadata.create_all(db)
 # ----- HELPER FUNCTIONS ------ #
 
 def get_free_champs_lst():
+	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
 	free_champs = requests.get(free_champs_url).json()["champions"]
 	lst_free_champs = [champ["id"] for champ in free_champs]
 	print(lst_free_champs)
@@ -78,7 +79,6 @@ def update_free_champs_db(free_champs_ids):
 
 def get_free_champs():
 	print(all_champs)
-	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
 	free_champs_db_lst = list(session.query(Champ).filter_by(is_free = True))
 
 	#No free champs updated yet
