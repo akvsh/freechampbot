@@ -55,7 +55,7 @@ class Champ(Base):
     champ_id = Column(Integer, primary_key=True, unique=True)
     champ_name = Column(Text)
     is_free = Column(Boolean, default=False)
-    date_info_updated = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+    date_info_updated = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 Session = sessionmaker(db)
 session = Session()
