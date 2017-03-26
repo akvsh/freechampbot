@@ -1,18 +1,17 @@
 # imports 
-from flask import Flask, request
-import requests
-import json
-from cassiopeia import riotapi
 import sys
 import os
+import json
 
-
-'''-----------------
-TODO
-Make a request once every few weeks to get champ to id mapping
-For free champ request, store the result in db
-finish the commands by monday
-'''
+from sqlalchemy import create_engine  
+from sqlalchemy import Column, Integer, Text, Boolean, DateTime  
+from sqlalchemy.ext.declarative import declarative_base  
+from sqlalchemy.orm import sessionmaker
+from cassiopeia import riotapi
+from flask import Flask, request
+import requests
+from datetime import datetime
+from cassiopeia import riotapi
 
 
 #setup + auth tokens
@@ -45,22 +44,68 @@ NOTE: The square brackets are required around the fields
 """
 
 
+db_string = os.environ["DATABASE_URL"]
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+db = create_engine(db_string)
+Base = declarative_base()  
+
+
+class Champ(Base):  
+    __tablename__ = 'champ_info'
+    champ_id = Column(Integer, primary_key=True, unique=True)
+    champ_name = Column(Text)
+    is_free = Column(Boolean, default=False)
+    date_info_updated = Column(DateTime, server_default=datetime.utcnow, onupdate=datetime.utcnow)
+
+Session = sessionmaker(db)
+session = Session()
+base.metadata.create_all(db)
+
 # ----- HELPER FUNCTIONS ------ #
+
+def get_free_champs_lst():
+	free_champs = requests.get(free_champs_url).json()["champions"]
+	lst_free_champs = [champ["id"] for champ in free_champs]
+	print(lst_free_champs)
+	return lst_free_champs
+
+def update_free_champs_db(free_champs_ids):
+	for c_id in free_champs_ids:
+			champ = session.query(Champ).filter_by(champ_id = c_id).first()
+			champ.is_free = True
+			session.commit()
+			names_lst.append(champ.champ_name)
+
 def get_free_champs():
 	print(all_champs)
 	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
-	free_champs = requests.get(free_champs_url).json()["champions"]
-	#print free_champs
- 	lst_free_champs = [champ["id"] for champ in free_champs]
-	print(lst_free_champs)
-	lst_names = [all_champs[str(champ_id)]["name"] for champ_id in lst_free_champs]
-	print(lst_names)
+	free_champs_db_lst = list(session.query(Champ).filter_by(is_free = True))
+
+	#No free champs updated yet
+	if free_champs_db_lst == []:
+		lst_free_champs = get_free_champs_lst()
+		lst_names = update_free_champs_db(lst_free_champs)
+	#There is a list of free champs
+	else:
+
+		date_updated = free_champs_db_lst[0].date_info_updated
+		num_days_passed =  (datetime.now().date() - date_updated).days
+		#update free champ list every day
+		if num_days_passed >= 1:
+			lst_free_champs = get_free_champs_lst()
+			for champ in free_champs_db_lst:
+				champ.is_free = False
+				session.commit()
+			lst_names = update_free_champs_db(lst_free_champs)
+		else:
+			lst_names = []
+			for champ in free_champs_db_lst:
+				lst_names.append(champ.champ_name)
+	print(lst_names) # see free champs list
 	return lst_names
 
 
-#Three can be abstracted to one function
 def get_username(msg):
-	# make a list of common terms to remove/replace and iterate trought it
 	name = msg.lower()
 	index1 = name.index("[")
 	index2 = name.index("]")
@@ -186,7 +231,6 @@ def send_reply():
 		print(json.loads(summoner.to_json()))
 		champ_name = get_champion_name(sender_msg)
 		champ = riotapi.get_champion_by_name(champ_name)
-		print(json.loads(champ.to_json()))
 		print("User: " + username)
 		print("Champ: " + champ_name)
 		try:
@@ -232,17 +276,6 @@ def send_reply():
 	r = requests.post('https://graph.facebook.com/v2.6/me/messages', params=params, json=resp, headers=headers)
 	sys.stdout.flush()
 	return "Reply Sent"
-
-'''
-#not a priority, get above two working first
-def champ_mastery(summoner_name, champ=None):
-	#top 3 champ masteries of summoner_name (Default)
-	#Champ mastery of 'champ' (second arg)
-	if champ == None:
-		#default
-	else:
-
-'''
 
 
 if __name__ == "__main__":
