@@ -90,6 +90,7 @@ def get_free_champs():
 
 	#No free champs updated yet
 	if free_champs_db_lst == []:
+		print("Empty list querying API")
 		lst_free_champs = get_free_champs_lst()
 		lst_names = update_free_champs_db(lst_free_champs)
 	#There is a list of free champs
@@ -99,12 +100,14 @@ def get_free_champs():
 		num_days_passed =  (datetime.now().date() - date_updated).days
 		#update free champ list every day
 		if num_days_passed >= 1:
+			print("Been more than a day, querying API")
 			lst_free_champs = get_free_champs_lst()
 			for champ in free_champs_db_lst:
 				champ.is_free = False
 				session.commit()
 			lst_names = update_free_champs_db(lst_free_champs)
 		else:
+			print("Free champs up to date. Grabbing from Postgres")
 			lst_names = []
 			for champ in free_champs_db_lst:
 				lst_names.append(champ.champ_name)
