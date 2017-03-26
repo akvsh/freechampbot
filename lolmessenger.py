@@ -67,6 +67,7 @@ def get_free_champs_lst():
 	free_champs_url = "https://na.api.pvp.net/api/lol/na/v1.2/champion?freeToPlay=true&api_key=" + riot_api_key
 	free_champs = requests.get(free_champs_url).json()["champions"]
 	lst_free_champs = [champ["id"] for champ in free_champs]
+	print("Free Champs IDs:")
 	print(lst_free_champs)
 	return lst_free_champs
 
@@ -74,12 +75,16 @@ def update_free_champs_db(free_champs_ids):
 	names_lst = []
 	for c_id in free_champs_ids:
 			champ = session.query(Champ).filter_by(champ_id = c_id).first()
+			names_lst.append(champ.champ_name)
+			print("Updating for: " +  champ.champ_name)
+			print("Current status: " + str(champ.is_free))
 			champ.is_free = True
 			session.commit()
-			names_lst.append(champ.champ_name)
+			
 	return names_lst
 
 def get_free_champs():
+	print("All Champs:")
 	print(all_champs)
 	free_champs_db_lst = list(session.query(Champ).filter_by(is_free = True))
 
